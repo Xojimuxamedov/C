@@ -2,49 +2,87 @@
 #include <math.h>
 
 int main(){
-
-  // USER INPUT
-  // biz printf() funksyasini o'rgandik 
-  // endi o'zimizni qiymatimizni kiritish uchun scanf() funksiyasini o'rganamiz
-  // scanf() funksyasi biz kiritgan qiymatni o'zgaruvchiga saqlash uchun ishlatiladi
+  // MEMORY ADRES
+  // biz biror o'zgaruvchi yaratganimizda, unning xotirada joylashgan manzili mavjud bo'ladi.
   
-  // int a;
-  //printf("Iltimos, biror butun son kiriting: \n");
-  //scanf("%d", &a); // %d - butun son uchun format spetsifikatori, 
-  // etibor bering &a - a o'zgaruvchisining manzili
-  // va biz uni belgilash uchun & ishlatamiz
+  int a = 10;
+  printf("O'zgaruvchi a ning qiymati: %d\n", a);
+  printf("O'zgaruvchi a ning xotira manzili: %p\n", &a);
+  // biror o'zgaruvchining xotira manzilini olish uchun '&' operatoridan foydalanamiz.
+  // uni print qilish uchun %p format spesifikatoridan foydalanamiz.
+  // biz o'zgaruvchini xottirada qayerdaligini bilish uchun ko'rganimizda 
+  // u bizga har bir run vaqtida turli manzillarni ko'rsatadi.
+  // &a bu pointer deb ataladi
+
+  // POINTERS
+  // pointer bu variablening xotira manzilini saqlaydigan o'zgaruvchidir.
+  // char myChar = 'A';
+  // int *pMyChar = &myChar; // pointerga o'zgaruvchining manzilini tayinlash
+  // printf("myChar ning qiymati: %c\n", myChar);
+  // printf("myChar ning xotira manzili: %p\n", &myChar);
+  // printf("pMyChar ning qiymati (myChar ning manzili): %p\n", pMyChar);
+
+
+  // DEREFERENCING
+  // pointer orqali o'zgaruvchining qiymatiga kirish uchun dereferencing qilamiz.
+
+  int myAge = 43;     // Variable declaration
+  int* ptr = &myAge;  // Pointer declaration
+
+  // Reference: myAge ning xotiradagi manzilini ko'rsatadi (0x7ffe5367e044)
+  printf("%p\n", ptr);
+
+  // Dereference: myAge ni xotiradagi manzili yordamida myAge ni chiqaramiz (43)
+  printf("%d\n", *ptr);
+
+
+  // POINTERS & ARRAYS
+  // arrayning pointerlari ketma-ketligi bo'lib, ular array elementlarining xotira manzillarini saqlaydi.
+  int numbers[] = {10, 20, 30, 40, 50};
+  for (int i = 0; i < 5; i++)
+  {
+    printf("Element %d ning qiymati: %d, manzili: %p\n", i, *(numbers + i), (numbers + i));
+  }
+  // bularning har birining pointer manzili 4 ga farq qiladi, chunki int turi 4 baytni egallaydi.
+  // va hokazo huddi shu yo'l bilan array qiymatini ketma ketlida olishimiz mumkin.
+  // ularni qiymatini o'zgartrishimiz ham mumkin:
+
+
+  // POINTER ARITHMETIC
+  // pointer arithmetic orqali pointer qiymatini o'zgartirishimiz mumkin.
+  int vals[] = {100, 200, 300, 400, 500};
+  int* pVal = vals; // vals array ning birinchi elementining manzili
+  printf("Birinchi element: %d\n", *pVal); // 100
+  pVal++; // pointer ni keyingi elementga o'tkazish
+  printf("Ikkinchi element: %d\n", *pVal); // 200
+  pVal += 2; // pointer ni yana ikki elementga o'tkazish
+  printf("To'rtinchi element: %d\n", *pVal); // 400
+
   
-  // printf("Siz kiritgan son: %d\n", a);
-
-  // MULTIPLE INPUTS
-  // int x;
-  // char str;
-  // printf("Iltimos butun son va matn kiriting: \n");  
-  // scanf("%d %c", &x, &str); // bir nechta qiymatlarni kiritish uchun
-  // bir necha turdagi qiymatni yozganda C ning o'zi uni turiga qarab mos ravishta ajratib oladi
-
-  // printf("Siz kiritgan son: %d\n", x);
-  // printf("Siz kiritgan matn: %c\n\n", str);
-
-
-  // TAKE STRING INPUT
-  // biz scanf() funksiyasi yordamida string qiymatlarni olayotganimizda 
-  // faqat bitta so'zni oladi, bo'sh joydan keyin to'xtaydi
-  // kiritayotgan so'zimizni necha bitligini oldindan yozib qo'yishimiz kerak 
-  // string uchun %s format spetsifikatori ishlatiladi va & ishlatilmaydi
-  // char name[30];
-  // printf("Iltimos ismingizni kiriting: \n");
-  // scanf("%s", name); // string uchun %s format spetsifikatori ishlatiladi
-  // printf("Salom: %s\n\n", name);
+  // hamma pointerlar bir hil tarzda o'zgarmaydi
+  // masalan, char pointer har bir qadamda 1 bayt o'zgaradi
+  char chars[] = {'A', 'B', 'C', 'D', 'E'};
+  char* pChar = chars; // chars array ning birinchi elementining manzili
+  printf("Birinchi element: %c\n", *pChar); // A
+  pChar++; // pointer ni keyingi elementga o'tkazish
+  printf("Ikkinchi element: %c\n", *pChar); // B
+  // yointerdagi tur qanday kattalikdagi bitda bo'lsa shunga mos ravshda ortadi yoki kamayadi.
+  // int da 4 bayt pointeriga 1 qo'shsak 4 baytga ortadi
+  // char da 1 bayt pointeriga 1 qo'shsak 1 baytga ortadi
 
 
-  // FGETS() 
-  // fgets() funksiyasi string qiymatlarni olish uchun ishlatiladi
-  // scnaf() funksiyasidan farqli o'laroq, fgets() funksiyasi bo'sh joylarni ham oladi
-  char fullname[50];
-  printf("Iltimos to'liq ismingizni kiriting: \n");
-  fgets(fullname, sizeof(fullname), stdin); // stdin - standart kirish oqimi
-  printf("Salom, Tanishganimdan hursandman: %s\n\n", fullname);
+  // POINTER TO POINTER
+  // pointer to pointer bu pointerning manzilini saqlaydigan pointerdir.
+  int number = 55;
+  int* pNumber = &number;        // pointer to int
+  int** ppNumber = &pNumber;     // pointer to pointer to int
+  printf("number ning qiymati: %d\n", number);               // 55
+  printf("pNumber orqali number ning qiymati: %d\n", *pNumber); // 55
+  printf("ppNumber orqali number ning qiymati: %d\n", **ppNumber); // 55
+
+  // bu yerda     number value ni o'zida saqlayabti
+  // *pNumber     number ning manzilini saqlayabti
+  // **ppNumber   pNumber ning manzilini saqlayabti va u orqali number ga kirayabti
 
   return 0;
 }
