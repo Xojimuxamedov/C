@@ -3,10 +3,16 @@
 
 int main(){
 
+    // SWITCH CASE
     int day = 0;
     printf("iltimos 1-7 gacha bolgan son tanlang: ");
     scanf("%d", &day);
-
+    
+    // switch case yordamida haftaning kunlarini chiqarish
+    // switch case da biz aynan true boladigan qiymatni tekshiramiz
+    // switch (shart) case: true bo'ladigan qiymatlar
+    // agar ularning hech biri true bo'lmasa default ishlaydi
+    
     switch (day)
     {
     case 1:
