@@ -1,102 +1,81 @@
 #include <stdio.h>
+#include <string.h>
+
+void myFunction(char name[], int age){
+  printf("Salom %s sizning yoshingiz %d\n", name, age);
+};
+
 
 int main(int argc, char const *argv[])
 {
-  //STRING
-  // boshqa tillarga o'xshab C da stringni oddiy yol bilan yarata olmaymiz
-  // C da string yasash uchun biz array dan foydalanamiz
-  // va barcha arrayning metodlari array bilan ishlashning barcha yollari bunda ham ishlaydi
-  // string char turida boladi chunki u char larning yig'indisidan tashkil topadi
 
-  char string[] = "Hello world!";
-  // biz hardoim string yozish uchun "" qo'shtirnoqdan foyalanishimiz kerak
+  myFunction("Dilshod", 20);
+  // funksyalar bu keyinchalik ishlatish mumkin bo'lgan kodlar bloki
+  // biz unga malumotlarni parametrlar sifatida kirgazsak bo'ladi 
+  // parametrdagi malumotlar funksyada ishlatilganda ular argumentlar deb ataladi
+  // age bu parametr u funksyani chaqrganda 20 berganmiz u argument
+  // agar parametrlarimiz ko'p bolsa uni vergul bilan ajratamiz
 
-  // print qilayotganda %s dan foydalanamiz
+  // funksyalarni yaratganimzda oldiga int void char va boshqa typelarni yozamiz
+  // bu bizga funksya qaysi turdagi malumotni jonatishini bildiradi
+  // void bu hech qanday return bo'lmasligini bildiradi
 
-  printf("%s\n", string);
+  // VARIABLE SCOPE
 
-  // agar biz stringdan bitta harfini olmoqchi bolsak u char bo'ladi
-  // uni print qilish uchun biz %c dan foydalanishimiz kerak boladi
+  // biz funksya yasaganimzda uni ichida yaragilgan variablelarni 
+  // undan tashqaridagi scopeda ishlata olmaymiz 
+  // ota scopedagi malumotlar bola scopega ota oladi 
+  // lekin teskarisiga bola scopedan ota scopega ota olmaydi 
+  // variable ota scopeda yasalib keyin value bola scopeda berilsa unda keyinchalik ota scopeda ishlata olamiz
 
-  printf("%c\n", string[0]); // 0 inchi index 1 inchi harf!
 
-  // undagi bitta harfni o'zgartirish uchun biz osha harfni indexidagi harfga yangi harf tayinlaymiz
-  // o'zgartirayotganimizda yangi harfni '' birtirnoq orasida belgilashimiz kerak 
-  string[0] = 'G';
-  printf("%s\n\n", string); 
+  // Global variable C da main funksyadan tashqarida bo'lsa u global boladi 
+  // uni main funksyadan tashqaridagi funksyada o'zgartirsa u mainda ishlatilganda ham o'zgarganligicha qoladi
   
-  // string daham for loop ishlaydi
 
-  for (int i = 0; i < sizeof(string)/sizeof(string[0]); i++)
-  {
-    printf("%c ",string[i]);
-  }
-  printf("\n\n");
+  //  {
+  //  |  x ni yaratdig
+  //  |  |  {
+  //  |  |  |  x ni ishlatsak bo'ladi 
+  //  |  |  |  y ni yaratdig
+  //  |  |  }
+  //  |  y ni ishlata olmaymiz
+  //  }
 
-  // stringni yasashni yana bitta usuli uni har birini alohida array elementlari qilib ko'rsatish
-  // ohirida \0 qo'yishimiz kerak bu null degani
-  // bu string tugaganini bildiradi
-  char greetings[] = {'H', 'e', 'l', 'l', 'o', ' ', 'W', 'o', 'r', 'l', 'd', '!', '\0'};
 
-  // SPECIAL CHARACTERS
-  // bizda stringni buzib qo'yadigan belgilar ham boladi 
-  // ularni tuzatish uchun \ backslash ni ishlatamiz 
+  // FUNCTION DECLARATION AND DEFINITION
+
+  // funksya ikki qismdan tashkil topgan 
+  // - 1 DECLARATION funksiyaning nomi, qaytariladigan turi va parametrlar (agar mavjud bo'lsa)
+  // - 2 DEFINITION funksiyaning tanasi (bajariladigan kod)
+
+  // void secondFunction(){ // DECLARATION
+      // funksyani tanasi (DEFINITION)
+  // };
+
+  // kodni osonroq qilish uchun biz oldin kodni DECLARATION ini yaratib olib 
+  // keyin DEFINITION qismini main() dan pastroqda yozgan afvzalroq boladi
+  // bu kodni osonroq tushunarliroq qilish uchun qilinadi 
+
+  //    FUNCTION DECLARATION
+  //    void myFunction();
+  //    
+  //    THE MAIN METHOD
+  //    int main() {
+  //      myFunction();  // call the function
+  //      return 0;
+  //    }
+  //    
+  //    FUNCTION DEFINITION
+  //    void myFunction() {
+  //      printf("I just got executed!");
+  //    }
+
+  // agar parametrlar bilan ishlaydigan bo'lsak unda DECLARATION qismida qo'yib keyin DEFINITION da ham yozish kerak.
+
+  // va biz bir funksyani ichida yana boshqa funksyani chaqirishimiz mumkin.
+
   
-  // \' 
-  // \"
-  // \\
-
-  printf("SPECIAL \" \' \\  CHARACTERS\n\n");
-
-  // STRING FUNCTIONS
-  // C da stringning funksyalaridan foydalanish uchun string.h kutubhonasidan foydalanamiz
-  #include <string.h>
-
-  // strlen 
-  // biz buni stringda nechta char borligini bilish uchun ishlatamiz
-  printf("%zu\n", strlen(greetings)); //12
-  printf("%zu\n", sizeof(greetings)); //13
-  printf("\n");
-
-  // etibor bergan bolsangiz strlen funksyasi bitta kamroq deb korsatayapti
-  // buning sababi u faqat string ga tegishli bolgan charlarni sanaydi \0 dan tashqari
-  // sizeof funksyasi esa stringning necha bitdan iboratligini ko'rsatadi 
-  
-  char testStr[50] = "Salom dunyo";
-  printf("%zu\n", strlen(testStr)); //11
-  printf("%zu\n", sizeof(testStr)); //50
-  printf("\n");
-
-  // CONCATENATE STRINGS
-  // strcat bizga ikkita stringni ulashni imkonini beradi 
-  // birinchi berilgan argumentga keyingisi qo'shilib birinchisiga tenglashadi 
-  // ulanganda uning bit uzunligi ham tenglashadi  
-  char str1[20] = "Birinchi ";
-  char str2[] = "Ikkinchi!";
-  
-  strcat(str1,str2);
-  printf("%s\n\n", str1);
-
-
-  // COPY STRINGS
-  // strcpy bu birinchi stringni ikkinchisiga bitlarigacha nusxalaydi 
-  char str3[20] = "Copy";
-  char str4[] = "";
-  
-  strcpy(str4, str3);
-  printf("%s \n",str4);
-  printf("\n\n");
-
-
-  // COMPARE STRINGS
-  // strcmp stringlarni solishtirish uchun 
-  // bunda ikkita string bir hil bolsa 0 qaytaradi teng bolmasa 0 dan boshqa son
-  char str5[] = "Copy";
-  char str6[] = "Copy";
-  char str7[] = "C";
-
-  printf("%d\n", strcmp(str5, str6));
-  printf("%d\n", strcmp(str6, str7));
 
   return 0;
 }
