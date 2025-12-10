@@ -2,87 +2,145 @@
 #include <math.h>
 
 int main(){
-  // MEMORY ADRES
-  // biz biror o'zgaruvchi yaratganimizda, unning xotirada joylashgan manzili mavjud bo'ladi.
+
+  // MATH FUNCTIONS
+
+  // Bizda yana matematika uchun funksyalar bor 
+  // uni ishlatsh uchun math.h kutubxonasini ulashimiz kerak
+
+  // ildiz olish sqrt(son)
+  printf("Ildiz(16) = %.2f\n", sqrt(16.0));
+
+  // ceil - yuqoriga qarab yaxlitlash
+  // floor - pastga qarab yaxlitlash
+  printf("Ceil(4.3) = %.2f\n", ceil(4.3));
+  printf("Floor(4.3) = %.2f\n", floor(4.3));
+
+  // pow(son, daraja) - sonni darajaga ko'tarish
+  printf("Pow(2, 3) = %.2f\n", pow(2.0, 3.2));
+
+
+  // INLINE FUNCTIONS
+  // Inline funksya chaqirilganda unga borib ishni bajarib qaytib kelmasdan
+  // funksya chaqirilganda bu kompilyatorga funksya chaqiruvini o'sha joyga joylashtirishni buyuradi
+  // Bu funksya ishlashini biroz tezlashtiradi
+
+  inline int yigindi1(int a, int b){
+    return a + b;
+  };
+   int yigindi2(int a, int b){
+    return a + b;
+  };
+  printf("Yigindi = %d\n", yigindi2(5, 10));
+  // inline yigindi1 va yigindi2 bir xil ishlaydi 
+  // faqat inline yigindi1 funksyasi qayerda ishlatilgan bolsa o'sha yerga funksyani kodini joylashtiradi
+  // yigindi2 funksyasi esa chaqirilganda funksiya joyiga borib ishni bajarib qaytadi
+
+  // Ko'p inline funksyalar dasturni katta va sekin ishlashiga olib kelishi mumkin
+
+  // REGULAR FUNCTIONS
+  // funksya chaqirilganda unga borib ishni bajarib qaytib keladi
+  // sekinroq ishlaydi
+  // katta funksiyalar uchun yaxshi ishlaydi
+
+  // INLINE FUNCTIONS
+  // funksya chaqirilganda uni o'sha joyga joylashtiradi
+  // tezroq ishlaydi
+  // kichik funksiyalar uchun yaxshi ishlaydi
+
+
+
+  // RECURSION
+  // Funksya o'zini o'zi chaqirishi
+  int faktorial(int n){
+    if(n == 0){
+      return 1;
+    } else {
+      return n * faktorial(n - 1);
+    }
+  };
+  printf("Faktorial(5) = %d\n", faktorial(5));
+
+  // Rekursiya juda kuchli vosita lekin uni noto'g'ri ishlatish dasturda xatoliklarga olib kelishi mumkin
+  // Masalan funksya o'zini cheksiz chaqirib ketishi mumkin va dastur to'xtab qoladi
+
+  // FUNCTION POINTERS
+  // pointerli funksya oddiy pointer kabi ishlaydi
+  // pointerli funksyalar sizga programma ishlayotgan paytda qaysi funksya chaqirilishini tanlash imkonini beradi
+  // yoki funksyani argument sifatida funksya uzatish imkonini beradi
   
-  int a = 10;
-  printf("O'zgaruvchi a ning qiymati: %d\n", a);
-  printf("O'zgaruvchi a ning xotira manzili: %p\n", &a);
-  // biror o'zgaruvchining xotira manzilini olish uchun '&' operatoridan foydalanamiz.
-  // uni print qilish uchun %p format spesifikatoridan foydalanamiz.
-  // biz o'zgaruvchini xottirada qayerdaligini bilish uchun ko'rganimizda 
-  // u bizga har bir run vaqtida turli manzillarni ko'rsatadi.
-  // &a bu pointer deb ataladi
+  // pointer funksya memoryda joylashgan manzilni biladi va siz uni hohlagan vaqtda chaqirishingiz mumkin
+  // pointer funksyani elon qilish uchun quyidagi sintaksis ishlatiladi
+  // returnType (*pointerName)(parameterType1, parameterType2, ...);
+  
+  int add(int a, int b){
+    return a + b;
+  };
+  
+  int (*ptr)(int, int) = add;
+  // bu ptr nomli pointer funksya ikkita int tipidagi argument qabul qiladi va int tipida qiymat qaytaradi
 
-  // POINTERS
-  // pointer bu variablening xotira manzilini saqlaydigan o'zgaruvchidir.
-  // char myChar = 'A';
-  // int *pMyChar = &myChar; // pointerga o'zgaruvchining manzilini tayinlash
-  // printf("myChar ning qiymati: %c\n", myChar);
-  // printf("myChar ning xotira manzili: %p\n", &myChar);
-  // printf("pMyChar ning qiymati (myChar ning manzili): %p\n", pMyChar);
+  int result = ptr(5, 5);
+  printf("Result: %d\n", result);
 
-
-  // DEREFERENCING
-  // pointer orqali o'zgaruvchining qiymatiga kirish uchun dereferencing qilamiz.
-
-  int myAge = 43;     // Variable declaration
-  int* ptr = &myAge;  // Pointer declaration
-
-  // Reference: myAge ning xotiradagi manzilini ko'rsatadi (0x7ffe5367e044)
-  printf("%p\n", ptr);
-
-  // Dereference: myAge ni xotiradagi manzili yordamida myAge ni chiqaramiz (43)
-  printf("%d\n", *ptr);
+  // bu yerda ptr add funksyasiga pointer
+  // ptr(5, 5) chaqiruv orqali add(5, 5) funksiyasini chaqiradi
+  // bu add(5, 5) funksya chaqirishi bilan bir xil natija beradi
 
 
-  // POINTERS & ARRAYS
-  // arrayning pointerlari ketma-ketligi bo'lib, ular array elementlarining xotira manzillarini saqlaydi.
-  int numbers[] = {10, 20, 30, 40, 50};
-  for (int i = 0; i < 5; i++)
-  {
-    printf("Element %d ning qiymati: %d, manzili: %p\n", i, *(numbers + i), (numbers + i));
+  // PASSING A FUNCTION AS AN ARGUMENT
+  // funksya poineri boshqa funksyaga argument sifatida uzatilishi mumkin
+  
+  void greetMorning() { printf("Good morning!\n"); };
+  void greetEvening() { printf("Good evening!\n"); };
+  
+  void greet(void (*func)()) {
+    func();
+  };
+
+  greet(greetMorning); // Good morning!
+  greet(greetEvening); // Good evening!
+
+
+  // FUNCTION POINTER ARRAY
+  // biz bir nechta funksya pointerlarini arrayda saqlashimiz va uni chaqirishimiz mumkin
+
+  void add1() { printf("Add\n"); };
+  void subtract() { printf("Subtract\n"); };
+  void multiply() { printf("Multiply\n"); };
+
+  void (*operations[3])() = { add1, subtract, multiply };
+  for (int i = 0; i < 3; i++) {
+    operations[i]();
   }
-  // bularning har birining pointer manzili 4 ga farq qiladi, chunki int turi 4 baytni egallaydi.
-  // va hokazo huddi shu yo'l bilan array qiymatini ketma ketlida olishimiz mumkin.
-  // ularni qiymatini o'zgartrishimiz ham mumkin:
+  return 0;
 
+  // bunday turdagi funksya pointer arraylari kalkulyator dasturlarida foydali bo'lishi mumkin
 
-  // POINTER ARITHMETIC
-  // pointer arithmetic orqali pointer qiymatini o'zgartirishimiz mumkin.
-  int vals[] = {100, 200, 300, 400, 500};
-  int* pVal = vals; // vals array ning birinchi elementining manzili
-  printf("Birinchi element: %d\n", *pVal); // 100
-  pVal++; // pointer ni keyingi elementga o'tkazish
-  printf("Ikkinchi element: %d\n", *pVal); // 200
-  pVal += 2; // pointer ni yana ikki elementga o'tkazish
-  printf("To'rtinchi element: %d\n", *pVal); // 400
+  // NORMAL FUNCTION
+  // ismi orqali chaqiriladi
+  // funksya dastur ishga tushishdan oldin aniqlanadi
+  // oddiy ko'd uchun yaxshi
+
+  // FUNCTION POINTER
+  // pointer orqali chaqiriladi
+  // dastur ishlayotganda qaysi funksya chaqirilishini tanlash mumkin
+  // moslashuvchanlik va qayta foydalanish uchun yaxshi
+
+  // CALLBACK FUNCTIONS
+  // calbak funksyalar argument sifatida boshqa funkyaga berilishi mumkin
+  // qabul qiluvchi funksya kerak bolganda uni qayta chaqirishi mumkin
+  // siz logikani o'zgartirmasdan qaysi funksya chaqirilishini tanlashingiz mumkin
+
+  void addNumbers(int a, int b) {
+    printf("The sum is: %d\n", a + b);
+  }
+  void calculate(void (*callback)(int, int), int x, int y) {
+    callback(x, y);
+  }
+
+  calculate(addNumbers, 5, 3);
 
   
-  // hamma pointerlar bir hil tarzda o'zgarmaydi
-  // masalan, char pointer har bir qadamda 1 bayt o'zgaradi
-  char chars[] = {'A', 'B', 'C', 'D', 'E'};
-  char* pChar = chars; // chars array ning birinchi elementining manzili
-  printf("Birinchi element: %c\n", *pChar); // A
-  pChar++; // pointer ni keyingi elementga o'tkazish
-  printf("Ikkinchi element: %c\n", *pChar); // B
-  // yointerdagi tur qanday kattalikdagi bitda bo'lsa shunga mos ravshda ortadi yoki kamayadi.
-  // int da 4 bayt pointeriga 1 qo'shsak 4 baytga ortadi
-  // char da 1 bayt pointeriga 1 qo'shsak 1 baytga ortadi
-
-
-  // POINTER TO POINTER
-  // pointer to pointer bu pointerning manzilini saqlaydigan pointerdir.
-  int number = 55;
-  int* pNumber = &number;        // pointer to int
-  int** ppNumber = &pNumber;     // pointer to pointer to int
-  printf("number ning qiymati: %d\n", number);               // 55
-  printf("pNumber orqali number ning qiymati: %d\n", *pNumber); // 55
-  printf("ppNumber orqali number ning qiymati: %d\n", **ppNumber); // 55
-
-  // bu yerda     number value ni o'zida saqlayabti
-  // *pNumber     number ning manzilini saqlayabti
-  // **ppNumber   pNumber ning manzilini saqlayabti va u orqali number ga kirayabti
-
   return 0;
 }
