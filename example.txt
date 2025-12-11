@@ -1,0 +1,3 @@
+Salom Dunyo!
+Bu C dasturlash tilida fayl bilan ishlash misolidir.
+Bu yangi qo'shilgan textdir.

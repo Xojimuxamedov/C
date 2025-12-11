@@ -1,146 +1,118 @@
 #include <stdio.h>
-#include <math.h>
 
 int main(){
+  // FILES
+  // C da biz fayl yaratishimiz ochishimiz o'qishimiz va yozishimiz mumkin
+  
+  FILE *fptr; // Bu yerda FILE malumot turi va biz u bilan ishlash uchun fptr pointerini yaratdik
+  // hozircha bu muhum emas faqat ishlashimiz uchun kerak
+  
+  // fopen funksiyasi 2 ta parametr oladi
+  // 1. fayl nomi (manzil bilan birga bo'lishi mumkin)
+  // 2. rejim (w - yaratish va yozish , a - qo'shish, r - o'qish)
 
-  // MATH FUNCTIONS
+  // WRITE TO A FILE
 
-  // Bizda yana matematika uchun funksyalar bor 
-  // uni ishlatsh uchun math.h kutubxonasini ulashimiz kerak
+  fptr = fopen("example.txt", "w"); // fayl yaratish va yozish rejimida ochish
 
-  // ildiz olish sqrt(son)
-  printf("Ildiz(16) = %.2f\n", sqrt(16.0));
+  // biz w modi bilan faylni ochdik endi unga yozishimiz mumkin
+  fprintf(fptr, "Salom Dunyo!\n"); // faylga yozish
+  fprintf(fptr, "Bu C dasturlash tilida fayl bilan ishlash misolidir.\n");
+  
+  // Shu yerda etibor berishimiz kerak bolgan narsa shuki,
+  // biz hozir faylga yangi text yozdik va yana w rejimida yangitdan fprintf chaqirsak,
+  // eski yozilgan text ustiga yangi text yoziladi va eski text o'chib ketadi.
+  
 
-  // ceil - yuqoriga qarab yaxlitlash
-  // floor - pastga qarab yaxlitlash
-  printf("Ceil(4.3) = %.2f\n", ceil(4.3));
-  printf("Floor(4.3) = %.2f\n", floor(4.3));
+  // !!! fayl bilan ishlab bo'lgandan keyin biz uni yopishimiz kerak
+  fclose(fptr); // faylni yopish
 
-  // pow(son, daraja) - sonni darajaga ko'tarish
-  printf("Pow(2, 3) = %.2f\n", pow(2.0, 3.2));
+  // APPEND CONTENT TO A FILE
 
+  // agar biz faylga yangi text qo'shmoqchi bo'lsak,
+  // biz faylni a (append) rejimida ochishimiz kerak
 
-  // INLINE FUNCTIONS
-  // Inline funksya chaqirilganda unga borib ishni bajarib qaytib kelmasdan
-  // funksya chaqirilganda bu kompilyatorga funksya chaqiruvini o'sha joyga joylashtirishni buyuradi
-  // Bu funksya ishlashini biroz tezlashtiradi
+  fptr = fopen("example.txt", "a"); // faylni qo'shish rejimida ochish
+  fprintf(fptr, "Bu yangi qo'shilgan textdir.\n"); // faylga yangi text qo'shish
+  // !!! lekin etibor berish kerak yuqoridagi biz faylni yopdik keyin uni a modida ochdik
+  // !!! agar biz faylni yopmasdan to'g'ridan to'g'ri a rejimida ochsak,
+  // !!! ba'zi tizimlarda bu noto'g'ri natija berishi mumkin
 
-  inline int yigindi1(int a, int b){
-    return a + b;
-  };
-   int yigindi2(int a, int b){
-    return a + b;
-  };
-  printf("Yigindi = %d\n", yigindi2(5, 10));
-  // inline yigindi1 va yigindi2 bir xil ishlaydi 
-  // faqat inline yigindi1 funksyasi qayerda ishlatilgan bolsa o'sha yerga funksyani kodini joylashtiradi
-  // yigindi2 funksyasi esa chaqirilganda funksiya joyiga borib ishni bajarib qaytadi
-
-  // Ko'p inline funksyalar dasturni katta va sekin ishlashiga olib kelishi mumkin
-
-  // REGULAR FUNCTIONS
-  // funksya chaqirilganda unga borib ishni bajarib qaytib keladi
-  // sekinroq ishlaydi
-  // katta funksiyalar uchun yaxshi ishlaydi
-
-  // INLINE FUNCTIONS
-  // funksya chaqirilganda uni o'sha joyga joylashtiradi
-  // tezroq ishlaydi
-  // kichik funksiyalar uchun yaxshi ishlaydi
+  fclose(fptr); // faylni yopish
 
 
+  // READ FROM A FILE
 
-  // RECURSION
-  // Funksya o'zini o'zi chaqirishi
-  int faktorial(int n){
-    if(n == 0){
-      return 1;
-    } else {
-      return n * faktorial(n - 1);
+  fptr = fopen("example.txt", "r"); // faylni o'qish rejimida ochish
+  // endi biz fayldan o'qishimiz uchun string o'zgaruvchini yaratamiz
+  char buffer[512]; // 512 belgidan iborat buffer yaratish
+  // fgets funksyasi bilan biz faylni o'qiy olamiz
+  
+  fgets(buffer, sizeof(buffer), fptr); // fayldan o'qish
+  // fgets(parametr1, parametr2, parametr3);
+  // parametr1 - fayldagi textni saqlash uchun biz yaratgan o'zgaruvchi 
+  // parametr2 - biz yaratgan o'zgaruvchining hajmi bitlarda
+  // parametr3 - fayl pointeri. fayl.
+
+  printf("%s", buffer); // o'qilgan textni ekranga chiqarish
+  // yuqoridagi kod faqat birinchi qatorni o'qiydi
+  // agar faylda bir nechta qator bo'lsa, biz loop ishlatib hamma qatorlarni o'qishimiz mumkin
+  while(fgets(buffer, sizeof(buffer), fptr)){
+    printf("%s", buffer); // har bir o'qilgan qatorni ekranga chiqarish
+  }
+
+  // ESLATMA: agar biz mavjud bo'lmagan faylni o'qishga harakat qilsak,
+  // fopen funksiyasi NULL qiymat qaytaradi
+
+
+  if (fptr == NULL)
+  {
+    printf("Faylni ochishda xatolik yuz berdi!\nBunday fayl mavjud emas.\n");
+    return 1; // dasturdan chiqish
+  }  
+  
+  fclose(fptr); // faylni yopish
+
+
+
+
+
+
+
+
+
+  printf("\n--- END OF FILE OPERATIONS EXAMPLE ---\n\n");
+  // EXAMPLE
+
+  // FAYLNI YARATADI
+  fptr = fopen("filename.txt", "w");
+  fclose(fptr);
+  
+  
+  // FAYLGA TEXT YOZADI
+  fptr = fopen("filename.txt", "a");
+  fprintf(fptr, "Faylga birinchi qator yozildi.\n");
+  fprintf(fptr, "Faylga ikkinchi qator yozildi.\n");
+  fclose(fptr);
+
+
+  // Faylni o'qish uchun ochadi
+  fptr = fopen("filename.txt", "r");
+
+  // FILEDAN MALUMOTNI O'QISH UCHUN STRING YARATAMIZ
+  char myString[100];
+
+  // Fayl mavjud bo'lsa
+  if(fptr != NULL) {
+
+    // textni o'qiydi va ekranga chiqaradi
+    while(fgets(myString, 100, fptr)) {
+      printf("%s", myString);
     }
-  };
-  printf("Faktorial(5) = %d\n", faktorial(5));
 
-  // Rekursiya juda kuchli vosita lekin uni noto'g'ri ishlatish dasturda xatoliklarga olib kelishi mumkin
-  // Masalan funksya o'zini cheksiz chaqirib ketishi mumkin va dastur to'xtab qoladi
-
-  // FUNCTION POINTERS
-  // pointerli funksya oddiy pointer kabi ishlaydi
-  // pointerli funksyalar sizga programma ishlayotgan paytda qaysi funksya chaqirilishini tanlash imkonini beradi
-  // yoki funksyani argument sifatida funksya uzatish imkonini beradi
-  
-  // pointer funksya memoryda joylashgan manzilni biladi va siz uni hohlagan vaqtda chaqirishingiz mumkin
-  // pointer funksyani elon qilish uchun quyidagi sintaksis ishlatiladi
-  // returnType (*pointerName)(parameterType1, parameterType2, ...);
-  
-  int add(int a, int b){
-    return a + b;
-  };
-  
-  int (*ptr)(int, int) = add;
-  // bu ptr nomli pointer funksya ikkita int tipidagi argument qabul qiladi va int tipida qiymat qaytaradi
-
-  int result = ptr(5, 5);
-  printf("Result: %d\n", result);
-
-  // bu yerda ptr add funksyasiga pointer
-  // ptr(5, 5) chaqiruv orqali add(5, 5) funksiyasini chaqiradi
-  // bu add(5, 5) funksya chaqirishi bilan bir xil natija beradi
-
-
-  // PASSING A FUNCTION AS AN ARGUMENT
-  // funksya poineri boshqa funksyaga argument sifatida uzatilishi mumkin
-  
-  void greetMorning() { printf("Good morning!\n"); };
-  void greetEvening() { printf("Good evening!\n"); };
-  
-  void greet(void (*func)()) {
-    func();
-  };
-
-  greet(greetMorning); // Good morning!
-  greet(greetEvening); // Good evening!
-
-
-  // FUNCTION POINTER ARRAY
-  // biz bir nechta funksya pointerlarini arrayda saqlashimiz va uni chaqirishimiz mumkin
-
-  void add1() { printf("Add\n"); };
-  void subtract() { printf("Subtract\n"); };
-  void multiply() { printf("Multiply\n"); };
-
-  void (*operations[3])() = { add1, subtract, multiply };
-  for (int i = 0; i < 3; i++) {
-    operations[i]();
+  //Fayl mavjud bo'lmasa
+  } else {
+    printf("Not able to open the file.");
   }
-  return 0;
-
-  // bunday turdagi funksya pointer arraylari kalkulyator dasturlarida foydali bo'lishi mumkin
-
-  // NORMAL FUNCTION
-  // ismi orqali chaqiriladi
-  // funksya dastur ishga tushishdan oldin aniqlanadi
-  // oddiy ko'd uchun yaxshi
-
-  // FUNCTION POINTER
-  // pointer orqali chaqiriladi
-  // dastur ishlayotganda qaysi funksya chaqirilishini tanlash mumkin
-  // moslashuvchanlik va qayta foydalanish uchun yaxshi
-
-  // CALLBACK FUNCTIONS
-  // calbak funksyalar argument sifatida boshqa funkyaga berilishi mumkin
-  // qabul qiluvchi funksya kerak bolganda uni qayta chaqirishi mumkin
-  // siz logikani o'zgartirmasdan qaysi funksya chaqirilishini tanlashingiz mumkin
-
-  void addNumbers(int a, int b) {
-    printf("The sum is: %d\n", a + b);
-  }
-  void calculate(void (*callback)(int, int), int x, int y) {
-    callback(x, y);
-  }
-
-  calculate(addNumbers, 5, 3);
-
-  
   return 0;
 }
