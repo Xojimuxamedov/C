@@ -1,118 +1,72 @@
 #include <stdio.h>
+#include <string.h>
 
 int main(){
-  // FILES
-  // C da biz fayl yaratishimiz ochishimiz o'qishimiz va yozishimiz mumkin
   
-  FILE *fptr; // Bu yerda FILE malumot turi va biz u bilan ishlash uchun fptr pointerini yaratdik
-  // hozircha bu muhum emas faqat ishlashimiz uchun kerak
+  // STRUCTURES (STURCTS)
+  // Struct lar bir necha qiymatlarni bitta nom ostida guruhlash imkonini beradi.
+  struct Point {
+    char nameFirstLatter;
+    int age;
+  };
+  // struct lar arrayga o'xshamaydi ular bir nechta turdagi qiymatlarni bitta nom ostida saqlash imkonini beradi.
+  // sturctlarni yaratayotganda uning nomi oldida "struct" kalit so'zi ishlatiladi.
   
-  // fopen funksiyasi 2 ta parametr oladi
-  // 1. fayl nomi (manzil bilan birga bo'lishi mumkin)
-  // 2. rejim (w - yaratish va yozish , a - qo'shish, r - o'qish)
+  // struct lardan foydalanish: struct nameStruct nameVariable;
+  struct Point person1;
+  person1.nameFirstLatter = 'A';
+  person1.age = 25;
 
-  // WRITE TO A FILE
+  printf("Name First Letter: %c\n", person1.nameFirstLatter);
+  printf("Age: %d\n", person1.age);
+  printf("\n");
 
-  fptr = fopen("example.txt", "w"); // fayl yaratish va yozish rejimida ochish
+  // biz bitta struct dan bir necha bor foydalanishimiz mumkin
+  struct Point person2;
+  person2.nameFirstLatter = 'B';
+  person2.age = 30;
 
-  // biz w modi bilan faylni ochdik endi unga yozishimiz mumkin
-  fprintf(fptr, "Salom Dunyo!\n"); // faylga yozish
-  fprintf(fptr, "Bu C dasturlash tilida fayl bilan ishlash misolidir.\n");
+  // agar structga string qo'shmoqchi bo'lsak quyidagicha yozamiz:
+  struct Person {
+      char name[50];
+      int age;
+  };
+  struct Person person3;
+  strcpy(person3.name, "Dilshod Xojimuxamedov");
+  person3.age = 21; 
+  printf("Name: %s\n", person3.name);
+  printf("Age: %d\n", person3.age);
+  printf("\n");
+
+  // structni yaratayotganda unga qiymatlarni berishimiz ham mumkin:
+  struct Point person4 = {'D', 22};
   
-  // Shu yerda etibor berishimiz kerak bolgan narsa shuki,
-  // biz hozir faylga yangi text yozdik va yana w rejimida yangitdan fprintf chaqirsak,
-  // eski yozilgan text ustiga yangi text yoziladi va eski text o'chib ketadi.
-  
+  printf("Name: %c\n", person4.nameFirstLatter);
+  printf("Age: %d\n", person4.age);
+  printf("\n");
 
-  // !!! fayl bilan ishlab bo'lgandan keyin biz uni yopishimiz kerak
-  fclose(fptr); // faylni yopish
+  // structlarni nusxalash (copy) qilish:
+  struct Point person5;
+  person5 = person4; // person4 ning qiymatlari person5 ga nusxalandi
+  printf("Name: %c\n", person5.nameFirstLatter);
+  printf("Age: %d\n", person5.age);
 
-  // APPEND CONTENT TO A FILE
+  // structlarni qiymatini yangilash:
+  person5.age = 28; // person5 ning age qiymati yangilandi
+  printf("Updated Age: %d\n", person5.age);
+  // stringda esa strcpy funksiyasidan foydalanamiz:
+  strcpy(person3.name, "Xojimuxamedov Dilshod");
+  printf("Updated Name: %s\n", person3.name);
 
-  // agar biz faylga yangi text qo'shmoqchi bo'lsak,
-  // biz faylni a (append) rejimida ochishimiz kerak
-
-  fptr = fopen("example.txt", "a"); // faylni qo'shish rejimida ochish
-  fprintf(fptr, "Bu yangi qo'shilgan textdir.\n"); // faylga yangi text qo'shish
-  // !!! lekin etibor berish kerak yuqoridagi biz faylni yopdik keyin uni a modida ochdik
-  // !!! agar biz faylni yopmasdan to'g'ridan to'g'ri a rejimida ochsak,
-  // !!! ba'zi tizimlarda bu noto'g'ri natija berishi mumkin
-
-  fclose(fptr); // faylni yopish
-
-
-  // READ FROM A FILE
-
-  fptr = fopen("example.txt", "r"); // faylni o'qish rejimida ochish
-  // endi biz fayldan o'qishimiz uchun string o'zgaruvchini yaratamiz
-  char buffer[512]; // 512 belgidan iborat buffer yaratish
-  // fgets funksyasi bilan biz faylni o'qiy olamiz
-  
-  fgets(buffer, sizeof(buffer), fptr); // fayldan o'qish
-  // fgets(parametr1, parametr2, parametr3);
-  // parametr1 - fayldagi textni saqlash uchun biz yaratgan o'zgaruvchi 
-  // parametr2 - biz yaratgan o'zgaruvchining hajmi bitlarda
-  // parametr3 - fayl pointeri. fayl.
-
-  printf("%s", buffer); // o'qilgan textni ekranga chiqarish
-  // yuqoridagi kod faqat birinchi qatorni o'qiydi
-  // agar faylda bir nechta qator bo'lsa, biz loop ishlatib hamma qatorlarni o'qishimiz mumkin
-  while(fgets(buffer, sizeof(buffer), fptr)){
-    printf("%s", buffer); // har bir o'qilgan qatorni ekranga chiqarish
+  // structlarni funksiyalarga uzatish:
+  void printPoint(struct Point p) {
+      printf("Point Name First Letter: %c, Age: %d\n", p.nameFirstLatter, p.age);
   }
 
-  // ESLATMA: agar biz mavjud bo'lmagan faylni o'qishga harakat qilsak,
-  // fopen funksiyasi NULL qiymat qaytaradi
+  printPoint(person1);
 
-
-  if (fptr == NULL)
-  {
-    printf("Faylni ochishda xatolik yuz berdi!\nBunday fayl mavjud emas.\n");
-    return 1; // dasturdan chiqish
-  }  
+  // structlar bizga murakkab ma'lumotlarni boshqarish imkonini beradi va kodni yanada tartibli qiladi.
+  // misol uchun bitta narsaga tegishli bo'lgan turli ma'lumotlarni bitta structda saqlash uchun.
   
-  fclose(fptr); // faylni yopish
-
-
-
-
-
-
-
-
-
-  printf("\n--- END OF FILE OPERATIONS EXAMPLE ---\n\n");
-  // EXAMPLE
-
-  // FAYLNI YARATADI
-  fptr = fopen("filename.txt", "w");
-  fclose(fptr);
-  
-  
-  // FAYLGA TEXT YOZADI
-  fptr = fopen("filename.txt", "a");
-  fprintf(fptr, "Faylga birinchi qator yozildi.\n");
-  fprintf(fptr, "Faylga ikkinchi qator yozildi.\n");
-  fclose(fptr);
-
-
-  // Faylni o'qish uchun ochadi
-  fptr = fopen("filename.txt", "r");
-
-  // FILEDAN MALUMOTNI O'QISH UCHUN STRING YARATAMIZ
-  char myString[100];
-
-  // Fayl mavjud bo'lsa
-  if(fptr != NULL) {
-
-    // textni o'qiydi va ekranga chiqaradi
-    while(fgets(myString, 100, fptr)) {
-      printf("%s", myString);
-    }
-
-  //Fayl mavjud bo'lmasa
-  } else {
-    printf("Not able to open the file.");
-  }
   return 0;
 }
