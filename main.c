@@ -1,72 +1,72 @@
 #include <stdio.h>
 #include <string.h>
 
+
+
 int main(){
-  
-  // STRUCTURES (STURCTS)
-  // Struct lar bir necha qiymatlarni bitta nom ostida guruhlash imkonini beradi.
-  struct Point {
-    char nameFirstLatter;
-    int age;
+  // NESTED STRUCTS
+  // structuralarni boshqa struct ichida ishlatish mumkin
+  struct Address {
+    char street[50];
+    char city[50];
+    int zip;
   };
-  // struct lar arrayga o'xshamaydi ular bir nechta turdagi qiymatlarni bitta nom ostida saqlash imkonini beradi.
-  // sturctlarni yaratayotganda uning nomi oldida "struct" kalit so'zi ishlatiladi.
-  
-  // struct lardan foydalanish: struct nameStruct nameVariable;
-  struct Point person1;
-  person1.nameFirstLatter = 'A';
-  person1.age = 25;
-
-  printf("Name First Letter: %c\n", person1.nameFirstLatter);
-  printf("Age: %d\n", person1.age);
-  printf("\n");
-
-  // biz bitta struct dan bir necha bor foydalanishimiz mumkin
-  struct Point person2;
-  person2.nameFirstLatter = 'B';
-  person2.age = 30;
-
-  // agar structga string qo'shmoqchi bo'lsak quyidagicha yozamiz:
   struct Person {
-      char name[50];
-      int age;
+    char name[50];
+    int age;
+    struct Address address; // nested struct
   };
-  struct Person person3;
-  strcpy(person3.name, "Dilshod Xojimuxamedov");
-  person3.age = 21; 
-  printf("Name: %s\n", person3.name);
-  printf("Age: %d\n", person3.age);
-  printf("\n");
 
-  // structni yaratayotganda unga qiymatlarni berishimiz ham mumkin:
-  struct Point person4 = {'D', 22};
+  struct Person person1;
   
-  printf("Name: %c\n", person4.nameFirstLatter);
-  printf("Age: %d\n", person4.age);
+  strcpy(person1.name, "Dilshod Xojimuxamedov");
+  person1.age = 21;
+  strcpy(person1.address.city, "Tashkent");
+  strcpy(person1.address.street, "Hamza 3");
+  person1.address.zip = 666103;
+
+  printf("Name: %s\n", person1.name);
+  printf("Age: %d\n", person1.age);
+  printf("City: %s\n", person1.address.city);
+  printf("Street: %s\n", person1.address.street);
+  printf("ZIP: %d\n", person1.address.zip);
+  
+  // bunda biz bitta asosiy struct yasab unga qo'shimcha boshqa structlarni joylashimiz mumkin
+  
   printf("\n");
 
-  // structlarni nusxalash (copy) qilish:
-  struct Point person5;
-  person5 = person4; // person4 ning qiymatlari person5 ga nusxalandi
-  printf("Name: %c\n", person5.nameFirstLatter);
-  printf("Age: %d\n", person5.age);
 
-  // structlarni qiymatini yangilash:
-  person5.age = 28; // person5 ning age qiymati yangilandi
-  printf("Updated Age: %d\n", person5.age);
-  // stringda esa strcpy funksiyasidan foydalanamiz:
-  strcpy(person3.name, "Xojimuxamedov Dilshod");
-  printf("Updated Name: %s\n", person3.name);
 
-  // structlarni funksiyalarga uzatish:
-  void printPoint(struct Point p) {
-      printf("Point Name First Letter: %c, Age: %d\n", p.nameFirstLatter, p.age);
+  // STRUCTS AND POINTERS
+
+  struct Person person2 = {"John Doe", 30, {"Main St", "New York", 10001}};
+  struct Person *ptr = &person2;
+
+  printf("Name: %s\n", ptr->name);
+  printf("Age: %d\n", ptr->age);
+  printf("City: %s\n", ptr->address.city);
+  printf("Street: %s\n", ptr->address.street);
+  printf("ZIP: %d\n", ptr->address.zip);
+
+  // struct pointerlarni funksyalarga uzatishda ishlatish mumkin
+  struct Car {
+    char model[50];
+    int year;
+  };
+
+  
+  void updateCarYear(struct Car *car) {
+    car->year = 2025;
   }
 
-  printPoint(person1);
-
-  // structlar bizga murakkab ma'lumotlarni boshqarish imkonini beradi va kodni yanada tartibli qiladi.
-  // misol uchun bitta narsaga tegishli bo'lgan turli ma'lumotlarni bitta structda saqlash uchun.
+  struct Car myCar = {"Mazda", 2015};
   
+  printf("\nCar Model is: %s\n", myCar.model);
+  printf("Before upadate car Year: %d", myCar.year);
+
+  updateCarYear(&myCar);
+  printf("\nAfter upadate car Year: %d", myCar.year);
+
   return 0;
 }
+
