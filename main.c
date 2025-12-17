@@ -4,69 +4,79 @@
 
 
 int main(){
-  // NESTED STRUCTS
-  // structuralarni boshqa struct ichida ishlatish mumkin
-  struct Address {
-    char street[50];
-    char city[50];
-    int zip;
-  };
-  struct Person {
-    char name[50];
-    int age;
-    struct Address address; // nested struct
+  
+  // UNIONS 
+  // union lar ham huddi structlarga o'xshaydi 
+  // lekin structlarda har bir variable memoryda alohida joy egallaydi
+  // unionlarda esa barcha variable'lar bir xil memory joyini egallaydi
+  // unionda bitta memoryga joy ajratilgandan keyin biror unionni yangilasak u memorydagi 
+  // variable malumotni yangilaydi yani eski elon qilingan valuela o'chib ketadi
+
+  union Data {
+    int i;
+    float f;
+    char str[20];
   };
 
-  struct Person person1;
-  
-  strcpy(person1.name, "Dilshod Xojimuxamedov");
-  person1.age = 21;
-  strcpy(person1.address.city, "Tashkent");
-  strcpy(person1.address.street, "Hamza 3");
-  person1.address.zip = 666103;
+  union Data data;
+  data.i = 10;
+  printf("data.i: %d\n", data.i); // 4
 
-  printf("Name: %s\n", person1.name);
-  printf("Age: %d\n", person1.age);
-  printf("City: %s\n", person1.address.city);
-  printf("Street: %s\n", person1.address.street);
-  printf("ZIP: %d\n", person1.address.zip);
+  data.f = 220.5;
+  printf("data.i: %d\n", data.i); // 4
+  printf("data.f: %.2f\n", data.f); // 8
+
+  printf("\n");
+
+  // ko'rayotgan bo'lsangiz data.i ning birinchi qiymati yo'qolib ketdi
+  // chunki data.f ham xuddi data.i kabi bir xil memory joyini egallaydi
   
-  // bunda biz bitta asosiy struct yasab unga qo'shimcha boshqa structlarni joylashimiz mumkin
-  
+  printf("Size of union Data: %zu bytes\n", sizeof(data)); // 20
   printf("\n");
 
 
+  // TYPDEF
+  // typedef orqali mavjud turlarga yangi nom berishimiz mumkin
 
-  // STRUCTS AND POINTERS
-
-  struct Person person2 = {"John Doe", 30, {"Main St", "New York", 10001}};
-  struct Person *ptr = &person2;
-
-  printf("Name: %s\n", ptr->name);
-  printf("Age: %d\n", ptr->age);
-  printf("City: %s\n", ptr->address.city);
-  printf("Street: %s\n", ptr->address.street);
-  printf("ZIP: %d\n", ptr->address.zip);
-
-  // struct pointerlarni funksyalarga uzatishda ishlatish mumkin
-  struct Car {
-    char model[50];
+ struct Car2 {
+    char brand[30];
     int year;
   };
 
+  // With typedef:
+  typedef struct {
+    char brand[30];
+    int year;
+  } Car2;
+
+  struct Car2 person1 = {"Alice", 30}; // struct bilan uzunroq yoziladi
+  Car2 person2 = {"Bob", 25}; // typedef bilan qisqaroq yoziladi
+
+  printf("Car 1: Brand: %s, Year: %d\n", person1.brand, person1.year);
+  printf("Car 2: Brand: %s, Year: %d\n", person2.brand, person2.year);
+
+  // PADDING
+  // C tilida structlarda padding bo'lishi mumkin
+  // bu dasturni qancha ishlashini qarab chiqiladi va structdagi elenentlar sarzon
+  // Paddinglar dastur tez ishlashiga ta'sir qiladi
+  // lekin biz ketma ketlikda o'tirsak bo'lgan elenentlar uchun paddingni kamaytirishimiz mumkin
   
-  void updateCarYear(struct Car *car) {
-    car->year = 2025;
-  }
+  struct Padded {
+    char a;      // 1 byte
+    // 3 bytes padding
+    int b;       // 4 bytes
+    char c;      // 1 byte
+    // 3 bytes padding
+  }; // Total size: 12 bytes
+  printf("Size of struct Padded: %zu bytes\n", sizeof(struct Padded));
 
-  struct Car myCar = {"Mazda", 2015};
+  struct Packed {
+    char a;      // 1 byte
+    char c;      // 1 byte
+    int b;       // 4 bytes
+  }; // Total size: 8 bytes
+  printf("Size of struct Packed: %zu bytes\n", sizeof(struct Packed));
   
-  printf("\nCar Model is: %s\n", myCar.model);
-  printf("Before upadate car Year: %d", myCar.year);
-
-  updateCarYear(&myCar);
-  printf("\nAfter upadate car Year: %d", myCar.year);
-
   return 0;
 }
 
