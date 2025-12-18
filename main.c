@@ -4,78 +4,57 @@
 
 
 int main(){
+  // ENUM enumerations
   
-  // UNIONS 
-  // union lar ham huddi structlarga o'xshaydi 
-  // lekin structlarda har bir variable memoryda alohida joy egallaydi
-  // unionlarda esa barcha variable'lar bir xil memory joyini egallaydi
-  // unionda bitta memoryga joy ajratilgandan keyin biror unionni yangilasak u memorydagi 
-  // variable malumotni yangilaydi yani eski elon qilingan valuela o'chib ketadi
+  // enum o'zgartirib bo'lmaydigan qiymatlar to'plamini yaratish uchun ishlatiladi.
 
-  union Data {
-    int i;
-    float f;
-    char str[20];
+  enum Level {
+    LOW,
+    MEDIUM,
+    HIGH
   };
 
-  union Data data;
-  data.i = 10;
-  printf("data.i: %d\n", data.i); // 4
+  // enumni ishlatish
+  enum Level myVar = MEDIUM;
+  // qiymatni elon qilganda u Level enumidagi biron qiymatga tenglashtirish kerak 
+  printf("My level is: %d\n", myVar); // Output: My level is: 1
 
-  data.f = 220.5;
-  printf("data.i: %d\n", data.i); // 4
-  printf("data.f: %.2f\n", data.f); // 8
-
-  printf("\n");
-
-  // ko'rayotgan bo'lsangiz data.i ning birinchi qiymati yo'qolib ketdi
-  // chunki data.f ham xuddi data.i kabi bir xil memory joyini egallaydi
-  
-  printf("Size of union Data: %zu bytes\n", sizeof(data)); // 20
-  printf("\n");
-
-
-  // TYPDEF
-  // typedef orqali mavjud turlarga yangi nom berishimiz mumkin
-
- struct Car2 {
-    char brand[30];
-    int year;
+  // enum ning birinchi hadi arrayga o'xshab birinchi hadi 0 keyingisi 1 va hokazo qiymatlarni oladi.
+  // agar ulardagi biror qiymatni o'zgartirsak qolganlari avtomatik ravishda o'sib boradi.
+  // 0 1 va 2 ni o'rniga 5 ni qo'ysak qolganlari 6 va 7 bo'ladi.
+  // va undan tashqari enum dagi barcha qiymatlarga alohida qiymat berish ham mumkin.
+  enum Status {
+    START = 5,
+    PROCESSING = 10,
+    END = 15
   };
 
-  // With typedef:
-  typedef struct {
-    char brand[30];
-    int year;
-  } Car2;
+  enum Status midStatus = PROCESSING;
+  printf("Mid status is: %d\n", midStatus); // Output: Mid status is: 10
 
-  struct Car2 person1 = {"Alice", 30}; // struct bilan uzunroq yoziladi
-  Car2 person2 = {"Bob", 25}; // typedef bilan qisqaroq yoziladi
+  // TYPEDEF & ENUM
+  // typedef bilan birgalikda enum dan foydalanish birqancha qulayroq 
+  // biz enum ni ishlatmay turib to'g'ridan to'g'ri yangi nom bilan ishlashimiz mumkin.
 
-  printf("Car 1: Brand: %s, Year: %d\n", person1.brand, person1.year);
-  printf("Car 2: Brand: %s, Year: %d\n", person2.brand, person2.year);
+  enum Day {
+    SUNDAY,
+    MONDAY,
+    TUESDAY,
+    WEDNESDAY,
+    THURSDAY,
+    FRIDAY,
+    SATURDAY
+  };
 
-  // PADDING
-  // C tilida structlarda padding bo'lishi mumkin
-  // bu dasturni qancha ishlashini qarab chiqiladi va structdagi elenentlar sarzon
-  // Paddinglar dastur tez ishlashiga ta'sir qiladi
-  // lekin biz ketma ketlikda o'tirsak bo'lgan elenentlar uchun paddingni kamaytirishimiz mumkin
+  typedef enum Day DayType;
+  DayType today = SATURDAY;
+  printf("Bugun: %d\n", today);
+
+  // yoki  bunday ishlatish ham mumkin 
+  typedef enum {sunday, monday, tuesday, wednesday, thursday, friday, saturday} Days;
+  Days tomorrow = TUESDAY;
+  printf("Ertaga: %d\n", tomorrow);
   
-  struct Padded {
-    char a;      // 1 byte
-    // 3 bytes padding
-    int b;       // 4 bytes
-    char c;      // 1 byte
-    // 3 bytes padding
-  }; // Total size: 12 bytes
-  printf("Size of struct Padded: %zu bytes\n", sizeof(struct Padded));
-
-  struct Packed {
-    char a;      // 1 byte
-    char c;      // 1 byte
-    int b;       // 4 bytes
-  }; // Total size: 8 bytes
-  printf("Size of struct Packed: %zu bytes\n", sizeof(struct Packed));
   
   return 0;
 }
